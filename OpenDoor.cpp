@@ -74,3 +74,22 @@ void UOpenDoor::CloseDoor(float DeltaTime)
 	GetOwner() -> SetActorRotation(DoorRotation);
 
 }
+
+float UOpenDoor::TotalMassOfActors() const
+{
+	float TotalMass = 0.f;
+
+	//Find All Overlapping Actors
+	TArray<AActor*> OverlappingActors;
+	if(!PressurePlate){return TotalMass;}
+	PressurePlate -> GetOverlappingActors(OverlappingActors);
+	
+	//Add Up Their Mass
+
+	for(AActor* Actor : OverlappingActors)
+	{
+		TotalMass += Actor -> FindComponentByClass<UPrimitiveComponent>() -> GetMass();
+	}
+
+	return TotalMass;
+}
