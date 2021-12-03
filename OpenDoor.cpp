@@ -24,6 +24,16 @@ void UOpenDoor::BeginPlay()
 
 }
 
+void UOpenDoor::FindAudioComponent()
+{
+	AudioComponent = GetOwner() -> FindComponentByClass<UAudioComponent>();
+
+	if(!AudioComponent)
+	{
+		UE_LOG(LogTemp, Error, TEXT("%s Missing audio component!"), *GetOwner() -> GetName());
+	}
+}
+
 void UOpenDoor::FindpressurePlate()
 {
 	if(!PressurePlate)

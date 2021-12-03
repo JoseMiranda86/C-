@@ -42,5 +42,19 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	ATriggerVolume* PressurePlate = nullptr;
+
+	float DoorLastOpened = 0.f;
+
+	UPROPERTY(EditAnywhere)
+	float DoorCloseDelay = 0.2f;
+
+	UPROPERTY(EditAnywhere)
+	float DoorOpenSpeed = 0.8f;
+
+	UPROPERTY(EditAnywhere)
+	float DoorCloseSpeed = 8.f;
+
+	UPROPERTY(EditAnywhere)
+	UAudioComponent* AudioComponent = nullptr;
 	
 };
