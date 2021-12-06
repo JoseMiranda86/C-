@@ -29,3 +29,31 @@ void UGrabber::SetupInputComponent()
 		InputComponent -> BindAction("Grab", IE_Released, this, &UGrabber::Release);
 	}
 }
+
+void UGrabber::FindPhysicsHandle()
+{
+	PhysicsHandle = GetOwner() -> FindComponentByClass<UPhysicsHandleComponent>();
+	if (!PhysicsHandle)
+	{
+		UE_LOG(LogTemp, Error, TEXT("No physics handle component found on %s!"), *GetOwner() -> GetName());
+	}
+}
+
+void UGrabber::Grab()
+{
+
+	FHitResult HitResult = GetFirstPhysicsBodyInReach();
+	UPrimitiveComponent* ComponentToGrab = HitResult.GetComponent();
+	AActor* ActorHit = HitResult.GetActor();
+
+	if (ActorHit)
+	{	
+		if(!PhysicsHandle){return;}
+		PhysicsHandle -> GrabComponentAtLocation
+		(
+			ComponentToGrab,
+			NAME_None,
+			GetPlayersReach()
+		);
+	}	
+}
