@@ -28,4 +28,17 @@ private:
 	UPhysicsHandleComponent* PhysicsHandle = nullptr;
 	UInputComponent* InputComponent = nullptr;
 
+	void Grab();
+	void Release();
+	void FindPhysicsHandle();
+	void SetupInputComponent();
+
+	//Return the first Actor within reach with physics body.
+	FHitResult GetFirstPhysicsBodyInReach() const;
+
+	//Return the Line Trace End
+	FVector GetPlayersReach() const;
+
+	//Get Players World position
+	FVector GetPlayersWorldPos() const;
 };

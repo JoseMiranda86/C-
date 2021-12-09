@@ -57,3 +57,64 @@ void UGrabber::Grab()
 		);
 	}	
 }
+
+void UGrabber::Release()
+{
+	if(!PhysicsHandle){return;}
+	PhysicsHandle -> ReleaseComponent();
+}
+
+// Called every frame
+void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
+{
+	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+
+	if(!PhysicsHandle){return;}
+	if (PhysicsHandle -> GrabbedComponent)
+	{
+		PhysicsHandle -> SetTargetLocation(GetPlayersReach());
+	}
+}
+
+FHitResult UGrabber::GetFirstPhysicsBodyInReach() const
+{
+	FHitResult Hit;
+	//Ray-cast out to a certain distance (Reach)
+	FCollisionQueryParams TraceParams(FName(TEXT("")), false, GetOwner());
+
+	GetWorld() -> LineTraceSingleByObjectType(
+		Hit,
+		GetPlayersWorldPos(),
+		GetPlayersReach(),
+		FCollisionObjectQueryParams(ECollisionChannel::ECC_PhysicsBody),
+		TraceParams
+	);
+
+	return Hit;
+}
+
+FVector UGrabber::GetPlayersWorldPos() const
+{
+	FVector PlayerViewPointLocation;
+	FRotator PlayerViewPointRotation;
+
+	GetWorld() -> GetFirstPlayerController() -> GetPlayerViewPoint(
+		PlayerViewPointLocation, 
+		PlayerViewPointRotation
+	);
+
+	return PlayerViewPointLocation;
+}
+
+FVector UGrabber::GetPlayersReach() const
+{
+	FVector PlayerViewPointLocation;
+	FRotator PlayerViewPointRotation;
+
+	GetWorld() -> GetFirstPlayerController() -> GetPlayerViewPoint(
+		PlayerViewPointLocation, 
+		PlayerViewPointRotation
+	);
+	
+	return PlayerViewPointLocation + PlayerViewPointRotation.Vector() * Reach;
+}
