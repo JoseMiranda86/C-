@@ -23,3 +23,36 @@ ABasePawn::ABasePawn()
 	ProjectileSpawnPoint = CreateDefaultSubobject<USceneComponent>(TEXT("Spawn Point"));
 	ProjectileSpawnPoint -> SetupAttachment(TurretMesh);
 }
+
+void ABasePawn::HandleDestruction()
+{
+	if (DeathParticles)
+	{
+		UGameplayStatics::SpawnEmitterAtLocation(this, DeathParticles, GetActorLocation(), GetActorRotation());
+	}
+	if (DeathSound)
+	{
+		UGameplayStatics::PlaySoundAtLocation(this, DeathSound, GetActorLocation());
+	}
+	if (DeathCameraShakeClass)
+	{
+		GetWorld() -> GetFirstPlayerController() -> ClientPlayCameraShake(DeathCameraShakeClass);
+	}
+}
+
+void ABasePawn::RotateTurret(FVector LookAtTarget)
+{
+	FVector ToTarget = LookAtTarget - TurretMesh -> GetComponentLocation();
+	FRotator LookAtRotation = FRotator(0.f, ToTarget.Rotation().Yaw, 0.f);
+	TurretMesh -> SetWorldRotation(LookAtRotation);
+}
+
+void ABasePawn::Fire()
+{
+	FVector Location = ProjectileSpawnPoint -> GetComponentLocation();
+	FRotator Rotation = ProjectileSpawnPoint -> GetComponentRotation();
+
+	auto Projectile = GetWorld() -> SpawnActor<AProjectile>(ProjectileClass, Location, Rotation);
+	Projectile -> SetOwner(this);
+
+}

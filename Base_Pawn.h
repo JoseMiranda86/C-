@@ -19,3 +19,30 @@ public:
 protected:
 	void RotateTurret(FVector LookAtTarget);
 	void Fire();	
+	
+private:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
+	class UCapsuleComponent* CapsuleComp;	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
+	UStaticMeshComponent* BaseMesh;	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
+	UStaticMeshComponent* TurretMesh;	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
+	USceneComponent* ProjectileSpawnPoint;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Sample Variables", meta = (AllowPrivateAccess = "true"))
+	int32 VisibleAnywhereInt = 20;	
+
+	UPROPERTY(EditDefaultsOnly, Category = "Combat");
+	TSubclassOf<class AProjectile> ProjectileClass;
+
+	UPROPERTY(EditAnywhere,Category = "Combat")
+	class UParticleSystem* DeathParticles; 
+
+	UPROPERTY(EditAnywhere,Category = "Combat")
+	class USoundBase* DeathSound; 
+
+	UPROPERTY(EditAnywhere, Category = "Combat")
+	TSubclassOf<class UCameraShakeBase> DeathCameraShakeClass;
+
+};
