@@ -36,3 +36,35 @@ void ATank::Tick(float DeltaTime)
         RotateTurret(HitResult.ImpactPoint);
     }
 }
+
+void ATank::HandleDestruction()
+{
+    Super::HandleDestruction();
+    SetActorHiddenInGame(true);
+    SetActorTickEnabled(false);
+    bAlive = false;
+
+}
+
+void ATank::BeginPlay()
+{
+    Super::BeginPlay();
+
+    TankPlayerController = Cast<APlayerController>(GetController());
+}
+
+void ATank::Move(float Value)
+{
+    FVector DeltaLocation = FVector::ZeroVector;
+    // X = Value * DeltaTime * Speed
+    DeltaLocation.X = Value * Speed * UGameplayStatics::GetWorldDeltaSeconds(this);
+    AddActorLocalOffset(DeltaLocation, true);
+}
+
+void ATank::Turn(float Value)
+{
+    FRotator DeltaRotation = FRotator::ZeroRotator;
+    // X = Value * DeltaTime * Speed
+    DeltaRotation.Yaw = Value * TurnRate * UGameplayStatics::GetWorldDeltaSeconds(this);
+    AddActorLocalRotation(DeltaRotation, true);
+}
