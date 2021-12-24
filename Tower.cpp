@@ -20,7 +20,6 @@ void ATower::HandleDestruction()
     Destroy();
 }
 
-
 void ATower::BeginPlay()
 {
     Super::BeginPlay();
@@ -28,4 +27,31 @@ void ATower::BeginPlay()
     Tank = Cast<ATank>(UGameplayStatics::GetPlayerPawn(this, 0));
 
     GetWorldTimerManager().SetTimer(FireRateTimerHandle, this, &ATower::CheckFireCondition, FireRate, true);
+}
+
+void ATower::CheckFireCondition()
+{
+    if (Tank == nullptr)
+    {
+        return;
+    }
+
+    if (InFireRange() && Tank -> bAlive)
+    {
+        Fire();
+    }
+}
+
+bool ATower::InFireRange()
+{
+    if (Tank)
+    {
+        float Distance = FVector::Dist(GetActorLocation(), Tank -> GetActorLocation());
+        if (Distance <= FireRange)
+        {
+            return true;
+        }
+    }
+
+    return false;
 }

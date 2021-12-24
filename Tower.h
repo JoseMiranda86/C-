@@ -18,3 +18,21 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	void HandleDestruction();
+	
+protected:
+
+	virtual void BeginPlay() override;
+
+private:
+
+	class ATank* Tank;
+
+	UPROPERTY(EditAnywhere, Category = "Combat")
+	float FireRange = 300.f;
+
+	FTimerHandle FireRateTimerHandle;
+	float FireRate = 2.f;
+	void CheckFireCondition();
+
+	bool InFireRange();
+};
